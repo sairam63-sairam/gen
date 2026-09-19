@@ -1,4 +1,5 @@
 import http from "node:http";
+import net from "node:net";
 import { readFile } from "node:fs/promises";
 import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -126,4 +127,19 @@ const server = http.createServer(async (request, response) => {
   }
 });
 
-server.listen(port, () => console.log(`Site Sage is running at http://localhost:${port}`));
+const listenOnAvailablePort = (candidate) => {
+  const probe = net.createServer();
+  probe.once("error", (error) => {
+    if (error.code === "EADDRINUSE") {
+      console.warn(`Port ${candidate} is busy; trying ${candidate + 1}.`);
+      listenOnAvailablePort(candidate + 1);
+      return;
+    }
+    throw error;
+  });
+  probe.listen(candidate, () => {
+    probe.close(() => server.listen(candidate, () => console.log(`Site Sage is running at http://localhost:${candidate}`)));
+  });
+};
+
+listenOnAvailablePort(port);
