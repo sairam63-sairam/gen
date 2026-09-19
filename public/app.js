@@ -7,6 +7,8 @@ const sourceState = document.querySelector("#sourceState");
 const sourceText = document.querySelector("#sourceText");
 const connectionLabel = document.querySelector("#connectionLabel");
 const statusPill = document.querySelector(".status-pill");
+const apiBase = window.SITE_SAGE_API_URL || "";
+const apiUrl = (path) => `${apiBase}${path}`;
 
 const addMessage = (label, text, type) => {
   if (messages.querySelector(".empty-state")) messages.innerHTML = "";
@@ -23,7 +25,7 @@ connectForm.addEventListener("submit", async (event) => {
   const url = siteUrl.value.trim();
   sourceState.classList.add("loading"); sourceText.textContent = "Reading the site...";
   try {
-    const response = await fetch("/api/ingest", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: /^https?:\/\//i.test(url) ? url : `https://${url}` }) });
+    const response = await fetch(apiUrl("/api/ingest"), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: /^https?:\/\//i.test(url) ? url : `https://${url}` }) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     sourceState.className = "source-state success"; sourceText.textContent = `${data.title} / ${data.words.toLocaleString()} words indexed`;
@@ -37,7 +39,7 @@ askForm.addEventListener("submit", async (event) => {
   const text = question.value.trim(); if (!text) return;
   addMessage("You", text, "user"); question.value = ""; question.disabled = true; document.querySelector("#askButton").disabled = true;
   addMessage("Site Sage", "Reading the source...", "assistant"); const pending = messages.lastElementChild.querySelector(".message-body");
-  try { const response = await fetch("/api/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: text }) }); const data = await response.json(); if (!response.ok) throw new Error(data.error); pending.textContent = data.answer; }
+  try { const response = await fetch(apiUrl("/api/ask"), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: text }) }); const data = await response.json(); if (!response.ok) throw new Error(data.error); pending.textContent = data.answer; }
   catch (error) { pending.textContent = error.message; }
   question.disabled = false; document.querySelector("#askButton").disabled = false; question.focus();
 });

@@ -9,7 +9,13 @@ const port = Number(process.env.PORT || 3000);
 let knowledge = null;
 
 const send = (response, status, payload, type = "application/json") => {
-  response.writeHead(status, { "Content-Type": type, "Cache-Control": "no-store" });
+  response.writeHead(status, {
+    "Content-Type": type,
+    "Cache-Control": "no-store",
+    "Access-Control-Allow-Origin": process.env.ALLOWED_ORIGIN || "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
+  });
   response.end(type === "application/json" ? JSON.stringify(payload) : payload);
 };
 
@@ -94,6 +100,7 @@ async function bodyOf(request) {
 const server = http.createServer(async (request, response) => {
   try {
     const pathname = new URL(request.url, `http://${request.headers.host}`).pathname;
+    if (request.method === "OPTIONS") return send(response, 204, "");
     if (request.method === "GET" && pathname === "/api/status") {
       return send(response, 200, { connected: Boolean(knowledge), site: knowledge && { url: knowledge.url, title: knowledge.title, words: knowledge.text.split(/\s+/).length } });
     }
