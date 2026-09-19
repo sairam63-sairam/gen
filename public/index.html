@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site Sage | Ask any website</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/"><span class="brand-mark">S</span><span>site<span class="brand-accent">sage</span></span></a>
+      <div class="status-pill"><span class="status-dot"></span><span id="connectionLabel">No site connected</span></div>
+    </header>
+
+    <section class="workspace">
+      <div class="intro">
+        <p class="eyebrow">Website intelligence, in plain English</p>
+        <h1>Ask a site.<br><em>Know the answer.</em></h1>
+        <p class="lede">Give Site Sage a URL. It reads the page, finds the signal, and gives you an answer grounded in the source.</p>
+      </div>
+
+      <section class="reader-panel" aria-label="Website reader">
+        <div class="panel-topline"><span class="tiny-label">01 / SOURCE</span><span class="privacy-note">Private to this session</span></div>
+        <form id="connectForm" class="connect-form">
+          <label for="siteUrl">Paste a website link</label>
+          <div class="url-row"><span class="url-prefix">https://</span><input id="siteUrl" type="url" placeholder="example.com/article" required><button id="connectButton" type="submit">Read site <span>↗</span></button></div>
+        </form>
+        <div id="sourceState" class="source-state"><span class="source-icon">◎</span><span id="sourceText">Waiting for a source to read</span></div>
+      </section>
+
+      <section class="chat-panel" aria-label="Ask questions">
+        <div class="panel-topline"><span class="tiny-label">02 / QUESTIONS</span><span class="model-note">Grounded answers only</span></div>
+        <div id="messages" class="messages">
+          <div class="empty-state"><div class="empty-orbit">✦</div><p>Your questions will appear here.</p><span>Connect a site above to start a conversation.</span></div>
+        </div>
+        <form id="askForm" class="ask-form">
+          <input id="question" type="text" placeholder="What would you like to know?" autocomplete="off" disabled required><button id="askButton" aria-label="Send question" type="submit" disabled>↑</button>
+        </form>
+      </section>
+    </section>
+    <footer><span>Site Sage / 2026</span><span>Built for curious minds</span></footer>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
