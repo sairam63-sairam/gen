@@ -10,7 +10,9 @@ Open the URL printed by the server. If port `3000` is busy, the server chooses t
 
 ## GitHub Pages deployment
 
-GitHub Pages hosts the `public` interface, but it cannot run the Node API in `server.js`. To make the deployed interface fully functional:
+The repository includes a GitHub Actions workflow that publishes the `public` interface. In GitHub, open **Settings > Pages > Build and deployment**, set **Source** to **GitHub Actions**, then push to `main` or run the workflow manually from the **Actions** tab.
+
+GitHub Pages cannot run the Node API in `server.js`. To make the deployed interface fully functional:
 
 1. Deploy `server.js` to a Node host such as Render, Railway, or Fly.io.
 2. In `public/index.html`, set `window.SITE_SAGE_API_URL` to that service URL.
